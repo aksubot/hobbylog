@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f4ed">
+    <meta name="description" content="Keep a simple work log for your businesses.">
+    <title>Business log — Hobbylog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="storage.js" defer></script>
+    <script src="business.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Hobbylog home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <path d="M7 21.5 13.2 7l4.1 10.1 2.2-5.3L25 25" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="7" cy="24" r="2" fill="currentColor"/>
+              <circle cx="25" cy="25" r="2" fill="currentColor"/>
+            </svg>
+          </span>
+          <span>hobbylog<span class="brand-dot">.</span></span>
+        </a>
+        <nav class="main-nav" aria-label="Hobby trackers">
+          <a class="nav-link" href="index.html">Movement</a>
+          <a class="nav-link" href="music.html">Music</a>
+          <a class="nav-link is-active" href="business.html" aria-current="page">Business</a>
+        </nav>
+        <div class="topbar-right">
+          <span class="local-badge"><span></span> Your personal tracker</span>
+          <button class="connection-button" id="open-settings" type="button">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M7.5 12.5 12.5 7.5M6.25 8.75l-1.5 1.5a3.536 3.536 0 0 0 5 5l1.5-1.5M13.75 11.25l1.5-1.5a3.536 3.536 0 0 0-5-5l-1.5 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <span id="connection-label">Connect a Gist</span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="intro business-intro">
+          <div class="intro-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> BUILDING THINGS THAT MATTER</div>
+            <h1>Good work, logged.<br><span>One day at a time.</span></h1>
+            <p>Keep the moving pieces in view. Log your website projects and candle recycling work in one simple place.</p>
+          </div>
+          <div class="intro-art business-art" aria-hidden="true">
+            <div class="sun"></div>
+            <div class="art-path"></div>
+            <div class="art-caption"><span class="sparkle">✳</span> make, mend, repeat</div>
+            <div class="art-leaf leaf-one"></div>
+            <div class="art-leaf leaf-two"></div>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Business work log stats">
+          <article class="stat-card stat-month">
+            <span class="stat-icon mint-icon" aria-hidden="true">↗</span>
+            <div>
+              <p class="stat-label">Work logs this month</p>
+              <p class="stat-value"><span id="month-count">0</span><span class="stat-unit">entries</span></p>
+            </div>
+            <div class="stat-decoration" aria-hidden="true"></div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon peach-icon" aria-hidden="true">⌘</span>
+            <div>
+              <p class="stat-label">Website making · all time</p>
+              <p class="stat-value"><span id="website-hours">0</span><span class="stat-unit">hours</span></p>
+            </div>
+            <span class="stat-note">Ideas into websites</span>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon lavender-icon" aria-hidden="true">♨</span>
+            <div>
+              <p class="stat-label">Candle recycling · all time</p>
+              <p class="stat-value"><span id="candle-hours">0</span><span class="stat-unit">hours</span></p>
+            </div>
+            <span class="stat-note">Making old candles new</span>
+          </article>
+        </section>
+
+        <section class="tracker-layout" aria-label="Business work log">
+          <div class="calendar-card">
+            <div class="calendar-heading">
+              <div>
+                <p class="section-kicker">YOUR WORK</p>
+                <h2 id="month-heading"></h2>
+              </div>
+              <div class="month-controls">
+                <button class="icon-button" id="previous-month" type="button" aria-label="Previous month">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m12.5 15-5-5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="icon-button" id="next-month" type="button" aria-label="Next month">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m7.5 15 5-5-5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="calendar-weekdays" aria-hidden="true">
+              <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid" role="grid" aria-label="Business work calendar"></div>
+            <div class="calendar-footer">
+              <span class="legend"><span class="legend-dot practice-dot"></span> Work logged</span>
+              <span class="legend"><span class="legend-dot today-dot"></span> Today</span>
+              <button class="text-button" id="back-to-today" type="button">Back to today <span aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+
+          <aside class="log-column">
+            <section class="log-card business-log-card">
+              <div class="log-card-top">
+                <div>
+                  <p class="section-kicker">KEEP THE MOMENTUM</p>
+                  <h2>Log work</h2>
+                </div>
+                <span class="log-sparkle" aria-hidden="true">✳</span>
+              </div>
+              <p class="selected-date" id="selected-date"></p>
+              <form id="business-form">
+                <label for="business-type">Which business?</label>
+                <div class="select-wrap">
+                  <select id="business-type" name="business">
+                    <option value="websites">🌐 &nbsp; Website making</option>
+                    <option value="candles">🕯️ &nbsp; Candle recycling</option>
+                  </select>
+                  <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <label for="task">What did you work on?</label>
+                <input class="business-text-input" id="task" name="task" type="text" maxlength="140" placeholder="A task, milestone, or idea…" required>
+                <label for="duration">Time spent <span class="optional-label">optional</span></label>
+                <div class="duration-field">
+                  <input id="duration" name="duration" type="number" min="1" max="600" step="1" placeholder="e.g. 45">
+                  <span>minutes</span>
+                </div>
+                <label for="notes">Notes <span class="optional-label">optional</span></label>
+                <textarea id="notes" name="notes" rows="2" maxlength="300" placeholder="Useful details or what’s next…"></textarea>
+                <button class="save-button" type="submit"><span>Save work log</span><span aria-hidden="true">↗</span></button>
+              </form>
+              <div class="log-feedback" id="business-feedback" role="status" aria-live="polite"></div>
+            </section>
+
+            <section class="recent-card">
+              <div class="recent-heading">
+                <div>
+                  <p class="section-kicker">SMALL WINS</p>
+                  <h2>Recent work</h2>
+                </div>
+                <span class="recent-count" id="recent-count">0</span>
+              </div>
+              <div class="recent-list" id="recent-list"></div>
+            </section>
+          </aside>
+        </section>
+
+        <footer class="page-footer">
+          <span>Small steps are still steps <span class="footer-heart">♥</span></span>
+          <button class="footer-settings" id="footer-settings" type="button">Data &amp; sync settings</button>
+        </footer>
+      </main>
+    </div>
+
+    <dialog class="settings-dialog" id="settings-dialog" aria-labelledby="settings-title">
+      <form class="settings-form" id="settings-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="section-kicker">YOUR DATA, YOUR WAY</p>
+            <h2 id="settings-title">Connect a GitHub Gist</h2>
+          </div>
+          <button class="dialog-close" id="close-settings" type="button" aria-label="Close settings">×</button>
+        </div>
+        <p class="dialog-description">Your workouts, practice, and work logs stay in this browser unless you connect a Gist. Connect a secret (unlisted) Gist to back them up and sync across devices. Anyone with its link can view it.</p>
+        <label for="github-token">GitHub personal access token</label>
+        <input id="github-token" name="token" type="password" autocomplete="off" placeholder="github_pat_…" spellcheck="false">
+        <p class="field-help">Use a fine-grained token with Gists access, or a classic token with the <code>gist</code> scope. The token is saved only in this browser.</p>
+        <label for="gist-id">Gist ID <span class="optional-label">optional</span></label>
+        <input id="gist-id" name="gistId" type="text" autocomplete="off" placeholder="Leave blank to create a new secret Gist" spellcheck="false">
+        <p class="field-help">Already have a Hobbylog Gist? Paste its ID to load it. Otherwise, we’ll create one for you.</p>
+        <div class="dialog-error" id="settings-error" role="alert"></div>
+        <div class="dialog-actions">
+          <button class="disconnect-button" id="disconnect-gist" type="button">Disconnect</button>
+          <button class="save-button connect-button" id="connect-gist" type="submit"><span>Connect &amp; sync</span><span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="privacy-note"><span aria-hidden="true">↳</span> Your token is never included in the website files. Anyone with access to this browser profile can use it.</p>
+      </form>
+    </dialog>
+  </body>
+</html>
