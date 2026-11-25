@@ -2,6 +2,7 @@
   const WORKOUTS_KEY = "hobbylog.workouts.v1";
   const MUSIC_KEY = "hobbylog.music.v1";
   const BUSINESS_KEY = "hobbylog.business.v1";
+  const SLEEP_KEY = "hobbylog.sleep.v1";
   const SETTINGS_KEY = "hobbylog.github.v1";
   const GIST_FILENAME = "hobbylog-workouts.json";
   const GITHUB_API = "https://api.github.com";
@@ -69,6 +70,20 @@
     return value.filter(isBusinessLog);
   }
 
+  function normalizeSleepLogs(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      throw new Error("Saved sleep data has an unexpected format.");
+    }
+    return Object.fromEntries(
+      Object.entries(value).filter(([date, entry]) =>
+        /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+        entry && typeof entry === "object" && !Array.isArray(entry) &&
+        /^([01]\d|2[0-3]):[0-5]\d$/.test(entry.bedtime) &&
+        /^([01]\d|2[0-3]):[0-5]\d$/.test(entry.wakeTime)
+      ).map(([date, entry]) => [date, { bedtime: entry.bedtime, wakeTime: entry.wakeTime }])
+    );
+  }
+
   function loadWorkouts() {
     const data = readJson(WORKOUTS_KEY, "Saved workout data");
     return data ? normalizeWorkouts(data) : {};
@@ -82,6 +97,11 @@
   function loadBusinessLogs() {
     const data = readJson(BUSINESS_KEY, "Saved business logs");
     return data ? normalizeBusinessLogs(data) : [];
+  }
+
+  function loadSleepLogs() {
+    const data = readJson(SLEEP_KEY, "Saved sleep data");
+    return data ? normalizeSleepLogs(data) : {};
   }
 
   function loadSettings() {
@@ -104,6 +124,10 @@
 
   function saveBusinessLogs(logs) {
     localStorage.setItem(BUSINESS_KEY, JSON.stringify(logs));
+  }
+
+  function saveSleepLogs(logs) {
+    localStorage.setItem(SLEEP_KEY, JSON.stringify(logs));
   }
 
   function saveSettings(settings) {
@@ -154,15 +178,17 @@
       workouts: normalizeWorkouts(parsed.workouts),
       music: normalizeMusicSessions(parsed.music || []),
       business: normalizeBusinessLogs(parsed.business || []),
+      sleep: normalizeSleepLogs(parsed.sleep || {}),
     };
   }
 
   function currentData() {
     return {
-      version: 3,
+      version: 4,
       workouts: loadWorkouts(),
       music: loadMusicSessions(),
       business: loadBusinessLogs(),
+      sleep: loadSleepLogs(),
     };
   }
 
@@ -186,7 +212,7 @@
       }),
     });
     const gist = await readGitHubResponse(response, "Could not create a secret Gist");
-    return { gistId: gist.id, workouts: data.workouts, music: data.music, business: data.business };
+    return { gistId: gist.id, workouts: data.workouts, music: data.music, business: data.business, sleep: data.sleep };
   }
 
   async function syncToGist(token, gistId) {
@@ -204,10 +230,12 @@
     loadWorkouts,
     loadMusicSessions,
     loadBusinessLogs,
+    loadSleepLogs,
     loadSettings,
     saveWorkouts,
     saveMusicSessions,
     saveBusinessLogs,
+    saveSleepLogs,
     saveSettings,
     removeSettings,
     connectToGist,

@@ -283,6 +283,7 @@ document.querySelector("#settings-form").addEventListener("submit", async (event
     HobbylogStore.saveWorkouts(result.workouts);
     HobbylogStore.saveMusicSessions(result.music);
     HobbylogStore.saveBusinessLogs(result.business);
+    HobbylogStore.saveSleepLogs(result.sleep);
     settings = nextSettings;
     logs = result.business;
     setSyncStatus("Connected and synced with your GitHub Gist.");
