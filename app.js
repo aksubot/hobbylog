@@ -10,6 +10,7 @@ const WORKOUTS = {
   swimming: { label: "Swimming", emoji: "🏊" },
   other: { label: "Something else", emoji: "✨" },
 };
+const VOLLEYBALL = { label: "Volleyball training", emoji: "🏐" };
 const TRAINING_WEEK = [
   { day: "MON", title: "Big lift A", kind: "Strength", short: "Lift A", type: "strength", emoji: "🏋️" },
   { day: "TUE", title: "Easy run", kind: "Conversational pace", short: "Easy run", type: "cardio", emoji: "🏃" },
@@ -46,6 +47,7 @@ const calendarGrid = document.querySelector("#calendar-grid");
 const monthHeading = document.querySelector("#month-heading");
 const selectedDateLabel = document.querySelector("#selected-date");
 const workoutType = document.querySelector("#workout-type");
+const volleyballToggle = document.querySelector("#toggle-volleyball");
 const logFeedback = document.querySelector("#log-feedback");
 const settingsDialog = document.querySelector("#settings-dialog");
 const settingsError = document.querySelector("#settings-error");
@@ -146,7 +148,11 @@ function renderCalendar() {
     button.className = "calendar-day";
     button.type = "button";
     button.setAttribute("role", "gridcell");
-    button.setAttribute("aria-label", `${day.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" })}${entry ? `, ${WORKOUTS[entry.type].label}` : ""}${key === today ? ", today" : ""}`);
+    const activityLabels = entry ? [
+      ...(entry.type ? [WORKOUTS[entry.type].label] : []),
+      ...(entry.volleyball ? [VOLLEYBALL.label] : []),
+    ] : [];
+    button.setAttribute("aria-label", `${day.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric", year: "numeric" })}${activityLabels.length ? `, ${activityLabels.join(", ")}` : ""}${key === today ? ", today" : ""}`);
     button.disabled = isFuture;
     if (isOutside) button.classList.add("is-outside");
     if (key === today) button.classList.add("is-today");
@@ -159,10 +165,18 @@ function renderCalendar() {
     number.textContent = String(day.getDate());
     button.append(number);
     if (entry) {
-      const workout = document.createElement("span");
-      workout.className = "day-workout";
-      workout.textContent = `${WORKOUTS[entry.type].emoji} ${WORKOUTS[entry.type].label.split(" /")[0]}`;
-      button.append(workout);
+      if (entry.type) {
+        const workout = document.createElement("span");
+        workout.className = "day-workout";
+        workout.textContent = `${WORKOUTS[entry.type].emoji} ${WORKOUTS[entry.type].label.split(" /")[0]}`;
+        button.append(workout);
+      }
+      if (entry.volleyball) {
+        const volleyball = document.createElement("span");
+        volleyball.className = "day-workout day-volleyball";
+        volleyball.textContent = `${VOLLEYBALL.emoji} Volleyball`;
+        button.append(volleyball);
+      }
     } else if (key >= dateKey(PLAN_START) && isFuture) {
       const weekdayIndex = (day.getDay() + 6) % 7;
       const planEntry = TRAINING_WEEK[weekdayIndex];
@@ -180,7 +194,7 @@ function selectDate(key) {
   selectedDate = key;
   const date = parseDate(key);
   visibleMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-  if (workouts[key]) workoutType.value = workouts[key].type;
+  if (workouts[key]?.type) workoutType.value = workouts[key].type;
   setFeedback("");
   render();
 }
@@ -297,16 +311,23 @@ function renderRecent() {
     item.className = "recent-item";
     const emoji = document.createElement("span");
     emoji.className = "recent-emoji";
-    emoji.textContent = WORKOUTS[entry.type].emoji;
+    emoji.textContent = entry.type ? WORKOUTS[entry.type].emoji : VOLLEYBALL.emoji;
     const info = document.createElement("div");
     info.className = "recent-info";
     const type = document.createElement("p");
     type.className = "recent-type";
-    type.textContent = WORKOUTS[entry.type].label;
+    type.textContent = entry.type ? WORKOUTS[entry.type].label : VOLLEYBALL.label;
+    if (entry.volleyball && entry.type) {
+      const extra = document.createElement("p");
+      extra.className = "recent-extra";
+      extra.textContent = `Also: ${VOLLEYBALL.label}`;
+      info.append(type, extra);
+    }
     const date = document.createElement("p");
     date.className = "recent-date";
     date.textContent = parseDate(key).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-    info.append(type, date);
+    if (!(entry.volleyball && entry.type)) info.append(type);
+    info.append(date);
     item.append(emoji, info);
     list.append(item);
   }
@@ -315,7 +336,11 @@ function renderRecent() {
 function renderSelectedDate() {
   const date = parseDate(selectedDate);
   selectedDateLabel.textContent = date.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
-  if (workouts[selectedDate]) workoutType.value = workouts[selectedDate].type;
+  if (workouts[selectedDate]?.type) workoutType.value = workouts[selectedDate].type;
+  const hasVolleyball = Boolean(workouts[selectedDate]?.volleyball);
+  volleyballToggle.setAttribute("aria-pressed", String(hasVolleyball));
+  volleyballToggle.classList.toggle("is-active", hasVolleyball);
+  volleyballToggle.textContent = hasVolleyball ? "🏐 Remove volleyball training" : "🏐 Add volleyball training";
 }
 
 function render() {
@@ -347,9 +372,24 @@ document.querySelector("#back-to-today").addEventListener("click", () => selectD
 
 document.querySelector("#workout-form").addEventListener("submit", (event) => {
   event.preventDefault();
-  workouts[selectedDate] = { type: workoutType.value };
+  workouts[selectedDate] = { ...workouts[selectedDate], type: workoutType.value };
   persistWorkouts();
   if (!settings.token || !settings.gistId) setFeedback("Workout saved on this device.");
+});
+
+volleyballToggle.addEventListener("click", () => {
+  const entry = workouts[selectedDate] || {};
+  if (entry.volleyball) {
+    delete entry.volleyball;
+    if (!entry.type) delete workouts[selectedDate];
+  } else {
+    entry.volleyball = true;
+    workouts[selectedDate] = entry;
+  }
+  persistWorkouts();
+  if (!settings.token || !settings.gistId) {
+    setFeedback(entry.volleyball ? "Volleyball training added alongside your workout." : "Volleyball training removed.");
+  }
 });
 
 document.querySelector("#clear-workout").addEventListener("click", () => {

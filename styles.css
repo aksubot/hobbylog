@@ -146,6 +146,10 @@ h2 { margin: 0; font-family: Manrope, sans-serif; font-size: 17px; font-weight: 
 .log-card-top h2, .recent-heading h2 { font-size: 16px; }
 .log-sparkle { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 10px; background: #f8ece0; color: #c6885f; font-size: 18px; }
 .selected-date { margin-bottom: 19px; color: #888b82; font-size: 10px; }
+.volleyball-toggle { width: 100%; min-height: 34px; padding: 0 10px; border: 1px solid #e8e9e1; border-radius: 6px; background: #fff; color: #555b52; font-size: 10px; font-weight: 600; text-align: left; cursor: pointer; }
+.volleyball-toggle:hover { border-color: #b7cdb9; background: #f7faf6; }
+.volleyball-toggle.is-active { border-color: #b7cdb9; background: #eff6ed; color: #3d694d; }
+.volleyball-note { margin: 5px 0 14px; color: #92958b; font-size: 8px; line-height: 1.4; }
 #workout-form label, .settings-form > label { display: block; margin: 0 0 7px; color: #454a43; font-size: 10px; font-weight: 600; }
 .select-wrap { position: relative; }
 .select-wrap select, .settings-form input { width: 100%; height: 39px; appearance: none; border: 1px solid #e8e9e1; border-radius: 6px; outline: none; background: #fff; color: #444941; font-size: 11px; }
@@ -169,6 +173,7 @@ h2 { margin: 0; font-family: Manrope, sans-serif; font-size: 17px; font-weight: 
 .recent-emoji { width: 30px; height: 30px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 9px; background: #f2f1e9; font-size: 15px; }
 .recent-info { min-width: 0; }
 .recent-type { overflow: hidden; margin: 0 0 3px; color: #464b44; font-size: 10px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.recent-extra { margin: 0 0 3px; color: #65806a; font-size: 9px; }
 .recent-date { margin: 0; color: #9b9d95; font-size: 9px; }
 .recent-empty { margin: 0; padding: 13px 0 5px; color: #92958b; font-size: 10px; line-height: 1.6; }
 .page-footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 2px 24px; color: #93958c; font-size: 9px; }

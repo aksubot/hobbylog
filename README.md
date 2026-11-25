@@ -4,6 +4,8 @@ A small, static tracker for movement, music practice, and business work, designe
 
 The tracker includes a repeating three-week training cycle beginning Monday, November 30, 2026: baseline, push, and deload. Its weekly template has three strength sessions, two short plyometric/agility sessions, one easy run, and a complete rest day. Planned rest days count toward the current streak; missed training days still break it. The plan is a general template; adjust it to your training history and recovery.
 
+Volleyball training can be logged as an optional extra for any date. It is stored alongside that day's workout, so it never replaces or changes the existing training plan.
+
 The **Music** page tracks piano and cello practice separately, including session duration, focus, and optional notes. The **Business** page keeps dated work logs for website making and candle recycling, with optional time spent and notes. All three trackers use the same local Gist connection; adding a new tracker preserves existing data.
 
 ## Publish on GitHub Pages

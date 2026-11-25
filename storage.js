@@ -25,9 +25,15 @@
     return Object.fromEntries(
       Object.entries(value).filter(([date, entry]) =>
         /^\d{4}-\d{2}-\d{2}$/.test(date) &&
-        entry && typeof entry.type === "string" &&
-        WORKOUT_TYPES.has(entry.type)
-      )
+        entry && typeof entry === "object" && !Array.isArray(entry) &&
+        ((typeof entry.type === "string" && WORKOUT_TYPES.has(entry.type)) || entry.volleyball === true)
+      ).map(([date, entry]) => [
+        date,
+        {
+          ...(typeof entry.type === "string" && WORKOUT_TYPES.has(entry.type) ? { type: entry.type } : {}),
+          ...(entry.volleyball === true ? { volleyball: true } : {}),
+        },
+      ])
     );
   }
 
