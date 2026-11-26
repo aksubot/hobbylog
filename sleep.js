@@ -20,6 +20,22 @@ let logs = loadSleepLogs();
 let settings = loadSettings();
 let syncQueue = Promise.resolve();
 
+function enableTextTimeFallback(input) {
+  const probe = document.createElement("input");
+  probe.setAttribute("type", "time");
+  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+  if (probe.type === "time" && !isTouchDevice) return;
+
+  input.type = "text";
+  input.inputMode = "text";
+  input.placeholder = input.id === "bedtime" ? "21:30" : "07:00";
+  input.pattern = "([01][0-9]|2[0-3]):[0-5][0-9]";
+  input.setAttribute("aria-description", "Enter a 24-hour time in HH:MM format.");
+}
+
+enableTextTimeFallback(bedtimeInput);
+enableTextTimeFallback(wakeTimeInput);
+
 function dateKey(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
