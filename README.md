@@ -6,7 +6,7 @@ The tracker includes a repeating three-week training cycle beginning Monday, Nov
 
 Volleyball training can be logged as an optional extra for any date. It is stored alongside that day's workout, so it never replaces or changes the existing training plan.
 
-The **Music** page tracks piano and cello practice separately, including session duration, focus, and optional notes. The **Business** page keeps dated work logs for website making and candle recycling, with optional time spent and notes. The **Sleep** page logs bedtime and wake time, scoring Sunday–Thursday nights by closeness to 21:30 and 07:00. Friday and Saturday nights are flexible and do not count toward the strict score. All trackers use the same local Gist connection; adding a new tracker preserves existing data.
+The **Music** page tracks piano and cello practice separately, including session duration, focus, and optional notes. The **Business** page keeps dated work logs for website making and candle recycling, with optional time spent and notes. The **Sleep** page logs bedtime and wake time, scoring Sunday–Thursday nights by closeness to 21:30 and 07:00. Friday and Saturday nights are flexible and do not count toward the strict score. The **Nutrition** page logs meals and water, and can estimate calories and macros from a small, offline list of common foods using typical servings from USDA FoodData Central SR Legacy. You choose the foods and servings; meal descriptions are not automatically interpreted, and recipes, brands, and actual portions can change the estimates. Weekly food-group variety is a prompt, not a micronutrient or adequacy measure. All trackers use the same local Gist connection; adding a new tracker preserves existing data.
 
 ## Publish on GitHub Pages
 

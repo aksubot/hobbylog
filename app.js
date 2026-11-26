@@ -429,6 +429,7 @@ document.querySelector("#settings-form").addEventListener("submit", async (event
     HobbylogStore.saveMusicSessions(result.music);
     HobbylogStore.saveBusinessLogs(result.business);
     HobbylogStore.saveSleepLogs(result.sleep);
+    HobbylogStore.saveNutritionData(result.nutrition);
     if (!saveLocalWorkouts()) throw new Error("Gist connected, but local storage could not be updated.");
     setSyncStatus("Connected and synced with your GitHub Gist.");
     setFeedback("Connected and synced with your GitHub Gist.");
